@@ -1,0 +1,49 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/ColorUtils.ush"
+#include "/Engine/Private/SceneTexturesCommon.ush"
+#include "/Engine/Private/Random.ush"
+#include "/Engine/Private/GlobalDistanceFieldShared.ush"
+#include "/Engine/Private/SceneData.ush"
+#include "/Engine/Private/ScreenPass.ush"
+#include "/Engine/Generated/GeneratedUniformBuffers.ush" 
+#include "/Engine/Private/SceneTextureParameters.ush"
+
+Texture2D SrcTexture;
+SamplerState SrcTextureSampler;
+
+void MainVS(
+	in float4 InPosition : ATTRIBUTE0,
+	in float2 InTexCoord : ATTRIBUTE1,
+	out noperspective float4 OutUVAndScreenPos : TEXCOORD0,
+	out float4 OutPosition : SV_POSITION)
+{
+	DrawRectangle(InPosition, InTexCoord, OutPosition, OutUVAndScreenPos);
+}
+
+void CopyPS(
+	noperspective float4 UVAndScreenPos : TEXCOORD0,
+	out float4 OutColor0 : SV_Target0)
+{
+	float2 UV = UVAndScreenPos.xy;
+	OutColor0 = Texture2DSample(SrcTexture, SrcTextureSampler, UV);
+}
+
+void ClearPS(
+	noperspective float4 UVAndScreenPos : TEXCOORD0,
+	out float4 OutColor0 : SV_Target0)
+{
+	OutColor0 = float4(0.0f, 0.0f, 0.0f, 0.0f);
+}
+
+void RewritePS(
+	noperspective float4 UVAndScreenPos : TEXCOORD0,
+	out float4 OutColor0 : SV_Target0)
+{
+	float2 UV = UVAndScreenPos.xy;
+	float4 SrcValue = Texture2DSample(SrcTexture, SrcTextureSampler, UV);
+	SrcValue.x = 1.0f;
+	SrcValue = normalize(SrcValue);
+	OutColor0 = SrcValue;
+}

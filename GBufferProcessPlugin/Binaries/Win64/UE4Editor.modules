@@ -1,0 +1,7 @@
+{
+	"BuildId": "e93b1274-9526-4a38-97b5-12a96cede44f",
+	"Modules": 
+	{
+		"GBufferProcessPlugin": "UE4Editor-GBufferProcessPlugin.dll"
+	}
+}
