@@ -3,7 +3,7 @@
 #include "RHI.h"
 #include "RHIResources.h"
 
-#define MY_CHANGE_WITH_ENGINE
+//#define MY_CHANGE_WITH_ENGINE
 
 class UGBufferProcessSubsystem;
 class UMaterialInterface;
